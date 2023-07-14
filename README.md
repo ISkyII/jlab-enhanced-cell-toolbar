@@ -25,7 +25,7 @@ For example, to show only the tags, you can set the following settings:
 }
 ```
 
-## Requirement
+## Requirements
 
 -   JupyterLab >= 3.0
 
