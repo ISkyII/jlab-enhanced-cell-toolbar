@@ -2,58 +2,6 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "title": "Cell Toolbar",
   "description": "Cell Toolbar Settings.",
-  "jupyter.lab.menus": {
-    "main": [
-      {
-        "id": "jp-mainmenu-view",
-        "items": [
-          {
-            "type": "separator",
-            "rank": 11.5
-          },
-          {
-            "type": "submenu",
-            "rank": 11.5,
-            "submenu": {
-              "id": "jp-mainmenu-view-cell-toolbar-enh",
-              "label": "Cell Toolbar",
-              "items": [
-                {
-                  "command": "@jlab-enhanced/cell-toolbar:toggle-toolbar",
-                  "rank": 0
-                },
-                {
-                  "command": "@jlab-enhanced/cell-toolbar:toggle-metadata",
-                  "rank": 1
-                },
-                {
-                  "command": "@jlab-enhanced/cell-toolbar:toggle-raw-format",
-                  "rank": 2
-                },
-                {
-                  "command": "@jlab-enhanced/cell-toolbar:toggle-slide-type",
-                  "rank": 3
-                },
-                {
-                  "command": "@jlab-enhanced/cell-toolbar:toggle-attachments",
-                  "rank": 4
-                },
-                {
-                  "command": "@jlab-enhanced/cell-toolbar:toggle-tags",
-                  "rank": 5
-                }
-              ]
-            }
-          },
-          {
-            "type": "separator",
-            "rank": 11.5
-          }
-        ]
-      }
-    ]
-  },
-  "jupyter.lab.transform": true,
   "properties": {
     "defaultTags": {
       "title": "List of Default Tags",
@@ -106,35 +54,40 @@
         }
       ]
     },
-    "toolbar": {
-      "title": "List of toolbar items",
-      "description": "An item is defined by a unique `name`. If its `type` is `command` (default), the `command` id is required; and optionally a `icon`, a `label` and the `cellType` on which it applies. You can disabled an default item by setting `disabled` to `true`.",
-
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/toolbarItem"
-      },
-      "default": [
+    "leftMenu": {
+      "title": "List of left menu items",
+      "description": "An item is defined by a 'command' name and an 'icon' name + optionally a 'tooltip' and the 'cellType' on which it applies",
+      "oneOf": [
         {
-          "name": "markdown-to-code",
-          "cellType": "markdown",
-          "command": "notebook:change-cell-to-code",
-          "icon": "ui-components:code"
+          "type": "null"
         },
         {
-          "name": "code-to-markdown",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/menuItem"
+          }
+        }
+      ],
+      "default": [
+        {
+          "cellType": "markdown",
+          "command": "notebook:change-cell-to-code",
+          "icon": "@jlab-enhanced/cell-toolbar:code"
+        },
+        {
           "cellType": "code",
           "command": "notebook:change-cell-to-markdown",
           "icon": "ui-components:markdown"
         },
         {
-          "name": "delete-cell",
-          "command": "notebook:delete-cell",
-          "icon": "ui-components:delete"
+          "cellType": "code",
+          "command": "jupyterlab_code_formatter:format",
+          "icon": "@jlab-enhanced/cell-toolbar:format",
+          "tooltip": "Format Cell"
         },
         {
-          "name": "spacer",
-          "type": "spacer"
+          "command": "notebook:delete-cell",
+          "icon": "@jlab-enhanced/cell-toolbar:delete"
         }
       ]
     },
@@ -144,62 +97,57 @@
       "type": "number",
       "minimum": 0,
       "default": 0
+    },
+    "rightMenu": {
+      "title": "List of left menu items",
+      "description": "An item is defined by a 'command' name and an 'icon' name + optionally a 'tooltip' and the 'cellType' on which it applies",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/menuItem"
+          }
+        }
+      ],
+      "default": null
+    },
+    "showTags": {
+      "title": "Tags editor visibility",
+      "description": "Whether to show the tags editor widget (default) or not.",
+      "type": "boolean",
+      "default": true
     }
   },
-  "additionalProperties": true,
+  "additionalProperties": false,
   "type": "object",
   "definitions": {
-    "toolbarItem": {
+    "menuItem": {
+      "type": "object",
       "properties": {
-        "name": {
-          "title": "Unique name",
+        "command": {
+          "title": "Command ID to be executed",
           "type": "string"
         },
-        "args": {
-          "title": "Command arguments",
-          "type": "object"
+        "icon": {
+          "title": "Item icon ID",
+          "type": "string"
+        },
+        "tooltip": {
+          "title": "Item tooltip",
+          "type": "string"
         },
         "cellType": {
           "title": "Cell type on which to display the item",
           "description": "Left empty to define on all cells",
           "type": "string",
           "enum": ["code", "markdown", "raw"]
-        },
-        "command": {
-          "title": "Command id",
-          "type": "string",
-          "default": ""
-        },
-        "disabled": {
-          "title": "Whether the item is ignored or not",
-          "type": "boolean",
-          "default": false
-        },
-        "icon": {
-          "title": "Item icon id",
-          "description": "If defined, it will override the command icon",
-          "type": "string"
-        },
-        "label": {
-          "title": "Item label",
-          "description": "If defined, it will override the command label",
-          "type": "string"
-        },
-        "type": {
-          "title": "Item type",
-          "type": "string",
-          "enum": ["command", "spacer"]
-        },
-        "rank": {
-          "title": "Item rank",
-          "type": "number",
-          "minimum": 0,
-          "default": 50
         }
       },
-      "required": ["name"],
       "additionalProperties": false,
-      "type": "object"
+      "required": ["command", "icon"]
     },
     "position": {
       "properties": {

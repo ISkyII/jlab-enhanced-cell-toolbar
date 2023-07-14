@@ -1,13 +1,12 @@
 import { LabIcon } from '@jupyterlab/ui-components';
 import { Message } from '@lumino/messaging';
 import { Widget } from '@lumino/widgets';
-import { CellToolbar } from './tokens';
+import { ICellMenuItem } from './tokens';
 
 /**
  * Constructor options for PositionedButton
  */
-export interface IPositionedButton
-  extends Omit<CellToolbar.IButton, 'command'> {
+export interface IPositionedButton extends Omit<ICellMenuItem, 'command'> {
   /**
    * Button callback
    */
@@ -89,11 +88,13 @@ namespace Private {
     if (item.className) {
       button.classList.add(item.className);
     }
-    LabIcon.resolve({ icon: item.icon }).element({
-      container: button,
-      elementPosition: 'center',
-      elementSize: 'normal'
-    });
+    button.appendChild(
+      LabIcon.resolve({ icon: item.icon }).element({
+        elementPosition: 'center',
+        elementSize: 'normal',
+        tag: 'span'
+      })
+    );
     return button;
   }
 }
