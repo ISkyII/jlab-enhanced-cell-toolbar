@@ -88,6 +88,12 @@
         {
           "command": "notebook:delete-cell",
           "icon": "@jlab-enhanced/cell-toolbar:delete"
+        },        
+        {
+          "cellType": "code",
+          "command": "notebook:delete-cell",
+          "icon": "@jlab-enhanced/cell-toolbar:delete",
+          "tooltip": "My Button"
         }
       ]
     },
