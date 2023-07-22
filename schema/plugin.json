@@ -166,7 +166,7 @@
         "top": {
           "title": "Top distance in pixels",
           "type": "number",
-          "minimum": -100,
+          "minimum": -1000,
           "default": 0
         }
       },
